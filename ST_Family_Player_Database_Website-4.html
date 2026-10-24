@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ST FAMILY | Player Database</title>
+<style>
+:root{--bg:#0b1020;--panel:#151d33;--line:#2b3858;--text:#f3f6ff;--muted:#a9b6d3;--accent:#66e3ff}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;background:linear-gradient(150deg,#0b1020,#121b35);color:var(--text)}
+header{padding:28px 16px;text-align:center;background:#10182b;border-bottom:1px solid var(--line)}
+h1{margin:0;font-size:clamp(25px,5vw,40px)}header p{color:var(--muted);margin:8px 0 0}
+main{max-width:1050px;margin:auto;padding:20px 14px 50px}.notice{padding:12px 14px;border:1px solid #5e527d;background:#241e3d;border-radius:12px;color:#e4dcff;font-size:14px}
+.guilds{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:18px 0}
+.guild{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:16px}
+.guild h2{font-size:18px;margin:0 0 6px}.guild p{color:var(--muted);font-size:13px;margin:0 0 12px}
+button{cursor:pointer;border:0;border-radius:9px;padding:10px 13px;background:var(--accent);color:#07111c;font-weight:700}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;background:#0d1426;color:var(--text);font:inherit}
+.search{flex:1;min-width:180px}.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:10px 0}
+h3{margin-top:24px}.player-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.player{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.player strong{display:block;font-size:17px;overflow-wrap:anywhere}.player small{display:block;color:var(--muted);margin:5px 0 10px}
+.tag{display:inline-block;border:1px solid var(--line);border-radius:30px;padding:3px 8px;font-size:12px;color:var(--muted);margin:2px}
+form,.panel{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:16px;margin-top:16px}
+label{display:block;color:var(--muted);font-size:13px;margin-bottom:4px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.secondary{background:#2b3858;color:var(--text)}.danger{background:#613044;color:white}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<header><h1>👑 ST FAMILY</h1><p>FREE FIRE • PLAYER DATABASE</p></header>
+<main>
+<div class="notice">এটি একটি প্রস্তুত ওয়েবসাইটের নমুনা। তথ্য এই ব্রাউজার/ডিভাইসেই সংরক্ষিত হবে; এখনো পাবলিক অনলাইন লিংক নয়। সবার সঙ্গে ব্যবহার করতে চাইলে হোস্টিং ও অনলাইন ডেটাবেস সেটআপ করতে হবে।</div>
+<section class="guilds">
+<div class="guild"><h2>🔵 ST⚠️ESP☠68</h2><p>Player profiles</p><button onclick="filterGuild('ST⚠️ESP☠68')">এই Guild দেখো</button></div>
+<div class="guild"><h2>🔴 ST⚠️ESP2☠68</h2><p>Player profiles</p><button onclick="filterGuild('ST⚠️ESP2☠68')">এই Guild দেখো</button></div>
+<div class="guild"><h2>🟣 —͞STRONG_TEAM!i</h2><p>Player profiles</p><button onclick="filterGuild('—͞STRONG_TEAM!i')">এই Guild দেখো</button></div>
+</section>
+<div class="controls">
+<input id="search" class="search" placeholder="Player Name বা UID দিয়ে খুঁজুন…" oninput="render()">
+<select id="guildFilter" onchange="render()"><option value="">সব Guild</option><option>ST⚠️ESP☠68</option><option>ST⚠️ESP2☠68</option><option>—͞STRONG_TEAM!i</option></select>
+<button onclick="showForm()">＋ Player যোগ করুন</button>
+</div>
+<section id="formPanel" class="panel hidden">
+<h3 id="formTitle">নতুন Player</h3>
+<form id="playerForm">
+<input type="hidden" id="editId">
+<div class="row">
+<div><label for="name">Player Name *</label><input id="name" required maxlength="60"></div>
+<div><label for="uid">Free Fire UID *</label><input id="uid" required maxlength="30"></div>
+<div><label for="guild">Guild *</label><select id="guild" required><option>ST⚠️ESP☠68</option><option>ST⚠️ESP2☠68</option><option>—͞STRONG_TEAM!i</option></select></div>
+<div><label for="joinDate">Join Date</label><input id="joinDate" type="date"></div>
+<div><label for="level">Level</label><input id="level" maxlength="20" placeholder="যেমন: 65"></div>
+<div><label for="rank">Rank</label><input id="rank" maxlength="40" placeholder="যেমন: Heroic"></div>
+<div><label for="status">Status</label><select id="status"><option>Active</option><option>Inactive</option><option>On Leave</option></select></div>
+<div><label for="performance">Guild War / Performance</label><input id="performance" maxlength="100"></div>
+</div>
+<div><label for="notes">Notes (ব্যক্তিগত সংবেদনশীল তথ্য লিখবেন না)</label><textarea id="notes" rows="3" maxlength="500"></textarea></div>
+<div class="actions"><button type="submit">Save Player</button><button type="button" class="secondary" onclick="hideForm()">Cancel</button></div>
+</form>
+</section>
+<h3>👥 Player Profiles <span id="count" class="tag">0</span></h3>
+<div id="players" class="player-list"></div>
+<p id="empty" class="notice hidden">এখনো কোনো Player যোগ করা হয়নি। “＋ Player যোগ করুন” চাপুন।</p>
+<footer>ST FAMILY • Player records • UID/যোগাযোগের তথ্য শুধু প্রয়োজনমতো সংরক্ষণ করুন।</footer>
+</main>
+<script>
+const KEY='stFamilyPlayersV1';
+const defaultGuilds=['ST⚠️ESP☠68','ST⚠️ESP2☠68','—͞STRONG_TEAM!i'];
+let players=[];
+try{players=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){players=[]}
+function persist(){localStorage.setItem(KEY,JSON.stringify(players));render()}
+function filterGuild(g){document.getElementById('guildFilter').value=g;render();document.getElementById('players').scrollIntoView({behavior:'smooth'})}
+function showForm(p=null){
+ document.getElementById('formPanel').classList.remove('hidden');
+ document.getElementById('formTitle').textContent=p?'Player তথ্য পরিবর্তন':'নতুন Player যোগ করুন';
+ document.getElementById('editId').value=p?.id||'';
+ ['name','uid','guild','joinDate','level','rank','status','performance','notes'].forEach(k=>document.getElementById(k).value=p?.[k]??(k==='guild'?defaultGuilds[0]:k==='status'?'Active':''));
+ document.getElementById('formPanel').scrollIntoView({behavior:'smooth'});
+}
+function hideForm(){document.getElementById('formPanel').classList.add('hidden');document.getElementById('playerForm').reset()}
+document.getElementById('playerForm').addEventListener('submit',e=>{
+ e.preventDefault();const id=document.getElementById('editId').value||String(Date.now());
+ const p={id};['name','uid','guild','joinDate','level','rank','status','performance','notes'].forEach(k=>p[k]=document.getElementById(k).value.trim());
+ const idx=players.findIndex(x=>x.id===id);if(idx>=0)players[idx]=p;else players.unshift(p);
+ persist();hideForm();
+});
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){
+ const q=document.getElementById('search').value.toLowerCase(),g=document.getElementById('guildFilter').value;
+ const list=players.filter(p=>(!g||p.guild===g)&&[p.name,p.uid,p.guild].some(v=>String(v||'').toLowerCase().includes(q)));
+ document.getElementById('count').textContent=list.length;
+ document.getElementById('empty').classList.toggle('hidden',list.length>0);
+ document.getElementById('players').innerHTML=list.map(p=>`<article class="player"><strong>${esc(p.name)}</strong><small>UID: ${esc(p.uid)}</small><span class="tag">${esc(p.guild)}</span><span class="tag">${esc(p.status)}</span><div class="row"><div>Level: ${esc(p.level||'—')}</div><div>Rank: ${esc(p.rank||'—')}</div><div>Join: ${esc(p.joinDate||'—')}</div></div><p>${esc(p.performance||'No performance record')}</p>${p.notes?`<p>${esc(p.notes)}</p>`:''}<div class="actions"><button onclick="showForm(players.find(x=>x.id==='${p.id}'))">Edit Profile</button><button class="secondary" onclick="exportProfile('${p.id}')">Export</button><button class="danger" onclick="deletePlayer('${p.id}')">Delete</button></div></article>`).join('');
+}
+function deletePlayer(id){if(confirm('এই Player-এর রেকর্ড মুছবেন?')){players=players.filter(p=>p.id!==id);persist()}}
+function exportProfile(id){const p=players.find(x=>x.id===id);if(!p)return;const blob=new Blob([JSON.stringify(p,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(p.name||'player').replace(/[^a-z0-9_-]/gi,'_')+'_profile.json';a.click();URL.revokeObjectURL(a.href)}
+render();
+</script>
+</body>
+</html>
